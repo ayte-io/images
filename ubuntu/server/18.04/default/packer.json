@@ -1,0 +1,31 @@
+{
+  "variables": {
+    "source": "http://cdimage.ubuntu.com/releases/18.04.2/release/ubuntu-18.04.2-server-amd64.iso",
+    "checksum": "34416ff83179728d54583bf3f18d42d2",
+    "password": "password",
+    "user": "root"
+  },
+  "builders": [
+    {
+      "type": "qemu",
+      "iso_url": "{{ user `source` }}",
+      "iso_checksum": "{{ user `checksum` }}",
+      "iso_checksum_type": "md5",
+      "output_directory": "artifact",
+      "vm_name": "ubuntu-server-18.04-amd64-default-qemu.qcow2",
+      "disk_size": 40960,
+      "format": "qcow2",
+      "disk_compression": true,
+      "accelerator": "kvm",
+      "ssh_username": "{{ user `user` }}",
+      "ssh_password": "{{ user `password` }}",
+      "http_directory": "./",
+      "headless": false,
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><f6><esc> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/kickstart.cfg<enter><wait>"
+      ],
+      "ssh_timeout": "60m"
+    }
+  ]
+}
